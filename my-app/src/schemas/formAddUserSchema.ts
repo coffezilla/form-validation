@@ -16,6 +16,8 @@ export const formSchema = z.object({
   raise: z.string().min(1, "Raise should be longer than 1 character"),
   // cep
   cep: z.string().min(1, "CEP should be longer than 1 character"),
+  // phone
+  phone: z.string().min(1, "Phone should be longer than 1 character"),
   // cpf
   cpf: z.string().min(1, "Name should be longer than 1 character"),
   // int
@@ -43,6 +45,18 @@ export const formSchema = z.object({
 
 // type
 export type TFormValues = z.infer<typeof formSchema>;
+
+// // pre change
+// export const handleMask = (
+//     e: React.ChangeEvent<HTMLInputElement>,
+//     mask: "CEP" | "MONEY" | "" = ""
+//   ) => {
+//     const { value, name } = e.target;
+//     let newValue = value;
+//     if (mask === "CEP") newValue = value + "x";
+//     if (mask === "MONEY") newValue = value + "y";
+//     setValue(name as keyof TFormValues, newValue);
+//   };
 
 // submit
 export const onSubmitAddUser: SubmitHandler<TFormValues> = (data) => {

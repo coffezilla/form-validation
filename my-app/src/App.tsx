@@ -6,6 +6,12 @@ import {
   onSubmitAddUser,
   TFormValues,
 } from "./schemas/formAddUserSchema";
+import { maskToPhoneNumber } from "./helpers/masks/phone";
+import { maskToCep } from "./helpers/masks/address";
+import { maskToCpf } from "./helpers/masks/personal";
+import { maskToMoney } from "./helpers/masks/currency";
+import { maskToOnlyNumbers, maskToPercentage } from "./helpers/masks/numbers";
+import { maskToDate } from "./helpers/masks/time";
 
 function App() {
   const {
@@ -19,6 +25,54 @@ function App() {
   });
 
   const watchAllFields = watch();
+
+  const handleMask = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    mask:
+      | "PHONE"
+      | "CEP"
+      | "CPF"
+      | "MONEY"
+      | "PERCENTAGE"
+      | "NUMBER"
+      | "DATE"
+      | "" = ""
+  ) => {
+    const { value, name } = e.target;
+    let newValue = value;
+    if (mask === "PHONE") newValue = maskToPhoneNumber(value);
+    if (mask === "CEP") newValue = maskToCep(value);
+    if (mask === "CPF") newValue = maskToCpf(value);
+    if (mask === "MONEY") newValue = maskToMoney(value);
+    if (mask === "PERCENTAGE") newValue = maskToPercentage(value);
+    if (mask === "NUMBER") newValue = maskToOnlyNumbers(value);
+    if (mask === "DATE") newValue = maskToDate(value);
+    setValue(name as keyof TFormValues, newValue);
+  };
+
+  const handleBlurMask = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    mask:
+      | "PHONE"
+      | "CEP"
+      | "CPF"
+      | "MONEY"
+      | "PERCENTAGE"
+      | "NUMBER"
+      | "DATE"
+      | "" = ""
+  ) => {
+    const { value, name } = e.target;
+    let newValue = value;
+    if (mask === "PHONE") newValue = maskToPhoneNumber(value);
+    if (mask === "CEP") newValue = maskToCep(value);
+    if (mask === "CPF") newValue = maskToCpf(value);
+    if (mask === "MONEY") newValue = maskToMoney(value, "", "commam", "commam");
+    if (mask === "PERCENTAGE") newValue = maskToPercentage(value);
+    if (mask === "NUMBER") newValue = maskToOnlyNumbers(value);
+    if (mask === "DATE") newValue = maskToDate(value);
+    setValue(name as keyof TFormValues, newValue);
+  };
 
   return (
     <>
@@ -46,10 +100,14 @@ function App() {
             />
             {errors.email && <p>{errors.email.message}</p>}
           </label>
-          <label className="block border border-black py-2 px-2 bg-gray-100">
-            <span className="block">Salário (salary) (máscara dinheiro)</span>
+          <label className="block border border-black py-2 px-2 bg-green-100">
+            <span className="block">
+              [ERROR] Salário (salary) (máscara dinheiro)
+            </span>
             <input
               {...register("salary")}
+              // onChange={(e) => handleMask(e, "MONEY")}
+              onBlur={(e) => handleBlurMask(e, "MONEY")}
               className="border border-black"
               id="salary"
               title="salary"
@@ -57,10 +115,13 @@ function App() {
             />
             {errors.salary && <p>{errors.salary.message}</p>}
           </label>
-          <label className="block border border-black py-2 px-2 bg-gray-100">
-            <span className="block">Aumento (raise) (máscara porcentagem)</span>
+          <label className="block border border-black py-2 px-2 bg-green-100">
+            <span className="block">
+              [ERROR] Aumento (raise) (máscara porcentagem)
+            </span>
             <input
               {...register("raise")}
+              onChange={(e) => handleMask(e, "PERCENTAGE")}
               className="border border-black"
               id="raise"
               title="raise"
@@ -72,6 +133,7 @@ function App() {
             <span className="block">CEP (cep) (máscara cep)</span>
             <input
               {...register("cep")}
+              onChange={(e) => handleMask(e, "CEP")}
               className="border border-black"
               id="cep"
               title="cep"
@@ -80,9 +142,22 @@ function App() {
             {errors.cep && <p>{errors.cep.message}</p>}{" "}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
+            <span className="block">Phone (phone) (máscara phone)</span>
+            <input
+              {...register("phone")}
+              onChange={(e) => handleMask(e, "PHONE")}
+              className="border border-black"
+              id="phone"
+              title="phone"
+              type="phone"
+            />
+            {errors.phone && <p>{errors.phone.message}</p>}{" "}
+          </label>
+          <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">CPF (cpf) (máscara cpf)</span>
             <input
               {...register("cpf")}
+              onChange={(e) => handleMask(e, "CPF")}
               className="border border-black"
               id="cpf"
               title="cpf"
@@ -92,7 +167,13 @@ function App() {
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Dias trabalhados (workdays)</span>
-            <input className="border border-black" id="workdays" type="text" />
+            <input
+              {...register("workdays")}
+              onChange={(e) => handleMask(e, "NUMBER")}
+              className="border border-black"
+              id="workdays"
+              type="text"
+            />
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Senha (password)</span>
@@ -120,6 +201,7 @@ function App() {
             <span className="block">Idade (age) Só número:</span>
             <input
               {...register("age")}
+              onChange={(e) => handleMask(e, "NUMBER")}
               className="border border-black"
               id="age"
               title="age"
@@ -127,12 +209,13 @@ function App() {
             />
             {errors.age && <p>{errors.age.message}</p>}{" "}
           </label>
-          <label className="block border border-black py-2 px-2 bg-gray-100">
+          <label className="block border border-black py-2 px-2 bg-green-100">
             <span className="block">
-              Data de nascimento (birthday) (Máscara data):
+              [ERROR] Data de nascimento (birthday) (Máscara data):
             </span>
             <input
               {...register("birthday")}
+              onChange={(e) => handleMask(e, "DATE")}
               className="border border-black"
               id="birthday"
               title="birthday"
