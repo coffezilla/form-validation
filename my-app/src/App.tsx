@@ -151,10 +151,12 @@ function App() {
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
+            {errors.genre && <p>{errors.genre.message}</p>}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Concordo (agree)</span>
             <input {...register("agree")} title="agree" type="checkbox" />
+            {errors.agree && <p>{errors.agree.message}</p>}
           </label>
 
           <label className="block border border-black py-2 px-2 bg-gray-100">
@@ -174,8 +176,10 @@ function App() {
               title="dark"
               {...register("theme")}
             />
+
             <span className="block">Preferência Dark (theme)</span>
           </label>
+          {errors.theme && <p>{errors.theme.message}</p>}
 
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Título (title) (Obrigatório)</span>
@@ -185,6 +189,7 @@ function App() {
               className="border border-black"
               {...register("title")}
             />
+            {errors.title && <p>{errors.title.message}</p>}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Descrição (description) (Opcional)</span>
@@ -194,6 +199,7 @@ function App() {
               className="border border-black"
               {...register("description")}
             />
+            {errors.description && <p>{errors.description.message}</p>}
           </label>
           <button
             type="submit"

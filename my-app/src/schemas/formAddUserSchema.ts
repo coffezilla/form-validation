@@ -32,7 +32,7 @@ export const formSchema = z.object({
     .boolean()
     .refine((value) => value === true, { message: "You must accept the term" }),
   // select
-  genre: z.string().nonempty("Select an option"),
+  genre: z.string().min(1, "Need choose some").nonempty("Select an option"),
   // radio
   theme: z.enum(["light", "dark"]),
   // textarea
