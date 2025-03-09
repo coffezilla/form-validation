@@ -1,5 +1,8 @@
 import { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
+import { maskFixToMoney } from "../helpers/masks/currency";
+import { maskFixToPercentage, maskToRawNumber } from "../helpers/masks/numbers";
+import { maskFixToDate } from "../helpers/masks/time";
 
 // schema
 export const formSchema = z.object({
@@ -12,17 +15,35 @@ export const formSchema = z.object({
     .email("Invalid email address")
     .min(1, "email should be longer than 1 character"),
   // money
-  salary: z.string().min(1, "Salary should be longer than 1 character"),
+  salary: z
+    .string()
+    .min(1, "Salary should be longer than 1 character")
+    .transform((value) => maskFixToMoney(value, "", "commam", "dot")),
   // percentage
-  raise: z.string().min(1, "Raise should be longer than 1 character"),
+  raise: z
+    .string()
+    .min(1, "Raise should be longer than 1 character")
+    .transform((value) => maskFixToPercentage(value, 3, false, "", "", true)),
   // cep
-  cep: z.string().min(1, "CEP should be longer than 1 character"),
+  cep: z
+    .string()
+    .min(1, "CEP should be longer than 1 character")
+    .transform((value) => maskToRawNumber(value)),
   // phone
-  phone: z.string().min(1, "Phone should be longer than 1 character"),
+  phone: z
+    .string()
+    .min(1, "Phone should be longer than 1 character")
+    .transform((value) => maskToRawNumber(value)),
   // cpf
-  cpf: z.string().min(1, "Name should be longer than 1 character"),
+  cpf: z
+    .string()
+    .min(1, "Name should be longer than 1 character")
+    .transform((value) => maskToRawNumber(value)),
   // int
-  workdays: z.string().min(1, "Work Days should be longer than 1 character"),
+  workdays: z
+    .string()
+    .min(1, "Work Days should be longer than 1 character")
+    .transform((value) => maskToRawNumber(value)),
   // password and confirm
   password: z
     .string()
@@ -37,9 +58,13 @@ export const formSchema = z.object({
     .string()
     .trim()
     .min(10, "Birthday should be longer than 1 character")
-    .max(10, "should be valid date"),
+    .max(10, "should be valid date")
+    .transform((value) => maskFixToDate(value, "", "DD/MM/YYYY", "YYYY-MM-DD")),
   // number
-  age: z.string().min(1, "Age should be longer than 1 character"),
+  age: z
+    .string()
+    .min(1, "Age should be longer than 1 character")
+    .transform((value) => maskToRawNumber(value)),
   // checkbox
   agree: z
     .boolean()
