@@ -12,13 +12,27 @@ export const maskToOnlyNumbers = (
   return valueFormatted;
 };
 
+// 000000
+export const maskToRawNumber = (
+  valueRaw?: number | string | null,
+  emptySymbol: string = ""
+): string => {
+  if (!valueRaw) return emptySymbol;
+
+  let valueFormatted = valueRaw.toString();
+  valueFormatted = valueFormatted.replace(/\D/g, "");
+
+  return valueFormatted;
+};
+
 // 0.00
 export const maskFixToPercentage = (
   valueRaw?: string | number | null,
   decimals: number = 2,
   isMathematical = false,
   prefix = "",
-  emptySymbol: string = ""
+  emptySymbol: string = "",
+  toMathematical = false
 ) => {
   if (!valueRaw) return emptySymbol;
 
@@ -30,10 +44,17 @@ export const maskFixToPercentage = (
 
   if (isNaN(valueFormatted)) return emptySymbol;
 
-  const valueFormattedWithDecimals = isMathematical
+  // check in format percentage
+  const valueFormattedIn = isMathematical
     ? valueFormatted * 100
     : valueFormatted;
-  const valueNormalized = `${(valueFormattedWithDecimals * 1).toFixed(
+
+  // check out format percentage
+  const valueFormattedOut = toMathematical
+    ? valueFormattedIn / 100
+    : valueFormattedIn;
+
+  const valueNormalized = `${(valueFormattedOut * 1).toFixed(
     decimals
   )}${prefix}`;
 

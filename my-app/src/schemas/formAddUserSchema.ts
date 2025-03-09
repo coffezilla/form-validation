@@ -8,6 +8,7 @@ export const formSchema = z.object({
   // email
   email: z
     .string()
+    .trim()
     .email("Invalid email address")
     .min(1, "email should be longer than 1 character"),
   // money
@@ -23,11 +24,18 @@ export const formSchema = z.object({
   // int
   workdays: z.string().min(1, "Work Days should be longer than 1 character"),
   // password and confirm
-  password: z.string().min(1, "Password should be longer than 1 character"),
-  repassword: z.string().min(1, "Repassword should be longer than 1 character"),
+  password: z
+    .string()
+    .trim()
+    .min(1, "Password should be longer than 1 character"),
+  repassword: z
+    .string()
+    .trim()
+    .min(1, "Repassword should be longer than 1 character"),
   // date
   birthday: z
     .string()
+    .trim()
     .min(10, "Birthday should be longer than 1 character")
     .max(10, "should be valid date"),
   // number
@@ -49,7 +57,13 @@ export const formSchema = z.object({
 // type
 export type TFormValues = z.infer<typeof formSchema>;
 
+// check if is equal
+export const checkIfIsEqualTo = (samplea: string, sampleb: string) => {
+  return samplea === sampleb;
+};
+
 // submit
 export const onSubmitAddUser: SubmitHandler<TFormValues> = (data) => {
+  // check password is equal
   console.log("data submitted", data);
 };

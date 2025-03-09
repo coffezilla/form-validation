@@ -14,19 +14,43 @@ export const maskToDate = (
 
 export const maskFixToDate = (
   valueRaw?: string | number | null,
-  emptySymbol: string = ""
+  emptySymbol: string = "",
+  formatFrom: "YYYY-MM-DD" | "DD/MM/YYYY" | "MM/DD/YYYY" = "DD/MM/YYYY",
+  formatTo: "YYYY-MM-DD" | "DD/MM/YYYY" | "MM/DD/YYYY" = "DD/MM/YYYY"
 ) => {
   if (!valueRaw) return emptySymbol;
 
-  const valueFormatted = valueRaw.toString();
-  const parts = valueFormatted.split("/");
-  const day = parts[0];
-  const month = parts[1];
-  const year = parts[2];
+  let valueFormatted = valueRaw.toString();
 
-  const formattedDDMMYYYY = `${day}/${month}/${year}`;
+  let day = "";
+  let month = "";
+  let year = "";
+
+  // in
+  switch (formatFrom) {
+    case "DD/MM/YYYY":
+      day = valueFormatted.split("/")[0];
+      month = valueFormatted.split("/")[1];
+      year = valueFormatted.split("/")[2];
+      break;
+    case "MM/DD/YYYY":
+      month = valueFormatted.split("/")[0];
+      day = valueFormatted.split("/")[1];
+      year = valueFormatted.split("/")[2];
+      break;
+    case "YYYY-MM-DD":
+      year = valueFormatted.split("-")[0];
+      month = valueFormatted.split("-")[1];
+      day = valueFormatted.split("-")[2];
+      break;
+    default:
+      day = "";
+      month = "";
+      year = "";
+      break;
+  }
+
   const formattedMMDDYYYY = `${month}/${day}/${year}`;
-
   const dateObject = new Date(formattedMMDDYYYY);
 
   const isValidDate =
@@ -40,5 +64,21 @@ export const maskFixToDate = (
     return emptySymbol;
   }
 
-  return formattedDDMMYYYY;
+  // out
+  switch (formatTo) {
+    case "DD/MM/YYYY":
+      valueFormatted = `${day}/${month}/${year}`;
+      break;
+    case "MM/DD/YYYY":
+      valueFormatted = `${month}/${day}/${year}`;
+      break;
+    case "YYYY-MM-DD":
+      valueFormatted = `${year}-${month}-${day}`;
+      break;
+    default:
+      valueFormatted = `${day}/${month}/${year}`;
+      break;
+  }
+
+  return valueFormatted;
 };

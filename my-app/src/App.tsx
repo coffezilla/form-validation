@@ -13,6 +13,7 @@ import { maskFixToMoney } from "./helpers/masks/currency";
 import {
   maskFixToPercentage,
   maskToOnlyNumbers,
+  maskToRawNumber,
 } from "./helpers/masks/numbers";
 import { maskFixToDate, maskToDate } from "./helpers/masks/time";
 
@@ -76,6 +77,11 @@ function App() {
     <>
       <div className="grid grid-cols-2 gap-5">
         <form onSubmit={handleSubmit(onSubmitAddUser)}>
+          <p>{maskToRawNumber("12123-00")}</p>
+          <p>{maskFixToMoney("1.099.000,29", "", "commam", "dot")}</p>
+          <p>{maskFixToPercentage("10.23", 6, false, "%", "")}</p>
+          <p>{maskFixToDate("02/29/2025", "-", "MM/DD/YYYY", "YYYY-MM-DD")}</p>
+
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Nome (name)</span>
             <input
