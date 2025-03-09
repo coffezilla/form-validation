@@ -1,4 +1,4 @@
-import { FieldErrors, UseFormRegister } from "react-hook-form";
+import { FieldErrors, UseFormRegister, UseFormSetValue } from "react-hook-form";
 import { TFormValues } from "../../../schemas/formAddUserSchema";
 import { memo } from "react";
 import { handleBlurMask, handleChangeMask } from "../utils.InputField";
@@ -9,7 +9,7 @@ interface IProps {
   field: keyof TFormValues;
   label?: string;
   placeholder?: string;
-  setValue?: any;
+  setValue?: UseFormSetValue<TFormValues>;
   maskInput?:
     | "DATE"
     | "NUMBER"
@@ -20,7 +20,7 @@ interface IProps {
     | "MONEY";
 }
 
-const InputField: React.FC<IProps> = ({
+const InputField = ({
   errors,
   field,
   register,
@@ -63,10 +63,6 @@ const InputField: React.FC<IProps> = ({
   // PERCENTAGE
   if (maskInput === "PERCENTAGE") {
     inputProps.onBlur = (e) => handleBlurMask(e, setValue, "PERCENTAGE");
-  }
-  // MONEY
-  if (maskInput === "MONEY") {
-    inputProps.onBlur = (e) => handleBlurMask(e, setValue, "MONEY");
   }
   // NUMBER
   if (maskInput === "NUMBER") {

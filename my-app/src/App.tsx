@@ -4,6 +4,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { formSchema, TFormValues } from "./schemas/formAddUserSchema";
 
 import InputField from "./hooks/forms/InputField/InputField";
+import SelectField from "./hooks/forms/SelectField/SelectField";
+import { useEffect } from "react";
 
 function App() {
   const {
@@ -11,9 +13,13 @@ function App() {
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<TFormValues>({
     resolver: zodResolver(formSchema),
+    // defaultValues: {
+    //   genre: "Gay",
+    // },
   });
 
   // submit
@@ -22,11 +28,15 @@ function App() {
     console.log("data submitted", data);
   };
 
+  useEffect(() => {
+    reset({ genre: "male" });
+  }, [reset]);
+
   return (
     <>
       <div className="grid grid-cols-2 gap-5">
         <form onSubmit={handleSubmit(onSubmitAddUser)}>
-          <InputField register={register} errors={errors} field="name" />
+          {/* <InputField register={register} errors={errors} field="name" />
           <InputField register={register} errors={errors} field="email" />
           <InputField
             register={register}
@@ -85,8 +95,16 @@ function App() {
             field="birthday"
             maskInput={"DATE"}
             setValue={setValue}
+          /> */}
+          <SelectField
+            register={register}
+            errors={errors}
+            field="genre"
+            options={[
+              { value: "male", title: "Male" },
+              { value: "female", title: "Female" },
+            ]}
           />
-          {/* <InputField register={register} errors={errors} field="genre"  /> */}
           {/* <InputField register={register} errors={errors} field="agree" /> */}
           {/* <InputField register={register} errors={errors} field="theme" /> */}
           {/* <InputField register={register} errors={errors} field="description" /> */}
