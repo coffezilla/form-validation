@@ -11,14 +11,7 @@ interface IProps {
   options?: { value: string; title: string }[];
 }
 
-const SelectField = ({
-  errors,
-  field,
-  register,
-  label = field,
-  placeholder = "-",
-  options = [],
-}: IProps) => {
+const CheckboxField = ({ errors, field, register, label = field }: IProps) => {
   const errorMessage = errors[field as keyof TFormValues]?.message;
 
   return (
@@ -26,24 +19,15 @@ const SelectField = ({
       <span className="block">
         {label} ({field}):
       </span>
-      <select
+      <input
         {...register(field)}
         title={field}
-        id={field}
-        className="border border-black"
-      >
-        {placeholder && <option value="">{placeholder}</option>}
-        {options.map((selectOption: { value: string; title: string }) => {
-          return (
-            <option key={selectOption.value} value={selectOption.value}>
-              {selectOption.title}
-            </option>
-          );
-        })}
-      </select>
+        type="checkbox"
+        className="mr-2" // Add margin for better spacing
+      />
       {errorMessage && <p className="bg-red-400">{errorMessage}</p>}
     </label>
   );
 };
 
-export default memo(SelectField);
+export default memo(CheckboxField);

@@ -80,10 +80,3 @@ export const formSchema = z.object({
 
 // type
 export type TFormValues = z.infer<typeof formSchema>;
-
-// check if is equal
-export const checkIfIsEqualTo = (samplea: string, sampleb: string) => {
-  return samplea === sampleb;
-};
-
-// submit

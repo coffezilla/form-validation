@@ -11,39 +11,23 @@ interface IProps {
   options?: { value: string; title: string }[];
 }
 
-const SelectField = ({
-  errors,
-  field,
-  register,
-  label = field,
-  placeholder = "-",
-  options = [],
-}: IProps) => {
+const TextareaField = ({ errors, field, register, label = field }: IProps) => {
   const errorMessage = errors[field as keyof TFormValues]?.message;
 
   return (
     <label className="block border border-black py-2 px-2 bg-gray-100">
       <span className="block">
         {label} ({field}):
-      </span>
-      <select
-        {...register(field)}
-        title={field}
+      </span>{" "}
+      <textarea
         id={field}
+        title={field}
         className="border border-black"
-      >
-        {placeholder && <option value="">{placeholder}</option>}
-        {options.map((selectOption: { value: string; title: string }) => {
-          return (
-            <option key={selectOption.value} value={selectOption.value}>
-              {selectOption.title}
-            </option>
-          );
-        })}
-      </select>
+        {...register(field)}
+      />
       {errorMessage && <p className="bg-red-400">{errorMessage}</p>}
     </label>
   );
 };
 
-export default memo(SelectField);
+export default memo(TextareaField);

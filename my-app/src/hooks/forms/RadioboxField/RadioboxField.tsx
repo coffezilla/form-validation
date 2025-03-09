@@ -11,12 +11,11 @@ interface IProps {
   options?: { value: string; title: string }[];
 }
 
-const SelectField = ({
+const RadioboxField = ({
   errors,
   field,
   register,
   label = field,
-  placeholder = "-",
   options = [],
 }: IProps) => {
   const errorMessage = errors[field as keyof TFormValues]?.message;
@@ -26,24 +25,24 @@ const SelectField = ({
       <span className="block">
         {label} ({field}):
       </span>
-      <select
-        {...register(field)}
-        title={field}
-        id={field}
-        className="border border-black"
-      >
-        {placeholder && <option value="">{placeholder}</option>}
-        {options.map((selectOption: { value: string; title: string }) => {
-          return (
-            <option key={selectOption.value} value={selectOption.value}>
-              {selectOption.title}
-            </option>
-          );
-        })}
-      </select>
+
+      {options.map((selectOption: { value: string; title: string }) => {
+        return (
+          <label className="block border border-black py-2 px-2 bg-gray-100">
+            <input
+              type="radio"
+              value={selectOption.value}
+              title={selectOption.value}
+              {...register(field)}
+            />
+            <span className="block">{selectOption.title}</span>
+          </label>
+        );
+      })}
+
       {errorMessage && <p className="bg-red-400">{errorMessage}</p>}
     </label>
   );
 };
 
-export default memo(SelectField);
+export default memo(RadioboxField);
