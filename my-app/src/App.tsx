@@ -1,11 +1,13 @@
+import { useEffect } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { SubmitHandler, useForm } from "react-hook-form";
+// schemas
 import { formSchema, TFormValues } from "./schemas/formAddUserSchema";
 
+// hooks
 import InputField from "./hooks/forms/InputField/InputField";
 import SelectField from "./hooks/forms/SelectField/SelectField";
-import { useEffect } from "react";
 import CheckboxField from "./hooks/forms/CheckboxField/CheckboxField";
 import RadioboxField from "./hooks/forms/RadioboxField/RadioboxField";
 import TextareaField from "./hooks/forms/TextareaField/TextareaField";
@@ -21,7 +23,7 @@ function App() {
   } = useForm<TFormValues>({
     resolver: zodResolver(formSchema),
     // defaultValues: {
-    //   genre: "Gay",
+    //   genre: "Male",
     // },
   });
 
@@ -129,7 +131,7 @@ function App() {
             type="submit"
             className="bg-green-400 hover:bg-green-600 px-2 py-2"
           >
-            Cadastrar
+            Submit
           </button>
         </form>
         <div>

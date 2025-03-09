@@ -39,33 +39,33 @@ const InputField = ({
   };
 
   // MONEY
-  if (maskInput === "MONEY") {
+  if (maskInput === "MONEY" && setValue) {
     inputProps.onBlur = (e) => handleBlurMask(e, setValue, "MONEY");
   }
   // DATE
-  if (maskInput === "DATE") {
+  if (maskInput === "DATE" && setValue) {
     inputProps.onChange = (e) => handleChangeMask(e, setValue, "DATE");
     inputProps.onBlur = (e) => handleBlurMask(e, setValue, "DATE");
   }
 
   // CPF
-  if (maskInput === "CPF") {
+  if (maskInput === "CPF" && setValue) {
     inputProps.onChange = (e) => handleChangeMask(e, setValue, "CPF");
   }
   // CEP
-  if (maskInput === "CEP") {
+  if (maskInput === "CEP" && setValue) {
     inputProps.onChange = (e) => handleChangeMask(e, setValue, "CEP");
   }
   // PHONE
-  if (maskInput === "PHONE") {
+  if (maskInput === "PHONE" && setValue) {
     inputProps.onChange = (e) => handleChangeMask(e, setValue, "PHONE");
   }
   // PERCENTAGE
-  if (maskInput === "PERCENTAGE") {
+  if (maskInput === "PERCENTAGE" && setValue) {
     inputProps.onBlur = (e) => handleBlurMask(e, setValue, "PERCENTAGE");
   }
   // NUMBER
-  if (maskInput === "NUMBER") {
+  if (maskInput === "NUMBER" && setValue) {
     inputProps.onBlur = (e) => handleBlurMask(e, setValue, "NUMBER");
   }
 

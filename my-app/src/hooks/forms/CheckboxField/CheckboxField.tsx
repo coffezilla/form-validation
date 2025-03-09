@@ -19,12 +19,7 @@ const CheckboxField = ({ errors, field, register, label = field }: IProps) => {
       <span className="block">
         {label} ({field}):
       </span>
-      <input
-        {...register(field)}
-        title={field}
-        type="checkbox"
-        className="mr-2" // Add margin for better spacing
-      />
+      <input {...register(field)} title={field} type="checkbox" />
       {errorMessage && <p className="bg-red-400">{errorMessage}</p>}
     </label>
   );

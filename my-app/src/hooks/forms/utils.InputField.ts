@@ -17,7 +17,6 @@ export const handleBlurMask = (
   setValue: UseFormSetValue<TFormValues>,
   mask: TMasksBlur
 ) => {
-  console.log("Loco");
   const { value, name } = e.target;
   let newValue = value;
   if (mask === "MONEY")
