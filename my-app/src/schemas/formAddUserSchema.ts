@@ -1,4 +1,3 @@
-import { SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import { maskFixToMoney } from "../helpers/masks/currency";
 import { maskFixToPercentage, maskToRawNumber } from "../helpers/masks/numbers";
@@ -88,7 +87,3 @@ export const checkIfIsEqualTo = (samplea: string, sampleb: string) => {
 };
 
 // submit
-export const onSubmitAddUser: SubmitHandler<TFormValues> = (data) => {
-  // check password is equal
-  console.log("data submitted", data);
-};

@@ -1,21 +1,9 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { SubmitHandler, useForm } from "react-hook-form";
-import {
-  formSchema,
-  onSubmitAddUser,
-  TFormValues,
-} from "./schemas/formAddUserSchema";
-import { maskToPhoneNumber } from "./helpers/masks/phone";
-import { maskToCep } from "./helpers/masks/address";
-import { maskToCpf } from "./helpers/masks/personal";
-import { maskFixToMoney } from "./helpers/masks/currency";
-import {
-  maskFixToPercentage,
-  maskToOnlyNumbers,
-  maskToRawNumber,
-} from "./helpers/masks/numbers";
-import { maskFixToDate, maskToDate } from "./helpers/masks/time";
+import { formSchema, TFormValues } from "./schemas/formAddUserSchema";
+
+import InputField from "./hooks/forms/InputField/InputField";
 
 function App() {
   const {
@@ -28,56 +16,83 @@ function App() {
     resolver: zodResolver(formSchema),
   });
 
-  const watchAllFields = watch();
-
-  const handleMask = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    mask:
-      | "PHONE"
-      | "CEP"
-      | "CPF"
-      | "MONEY"
-      | "PERCENTAGE"
-      | "NUMBER"
-      | "DATE"
-      | "" = ""
-  ) => {
-    const { value, name } = e.target;
-    let newValue = value;
-    if (mask === "PHONE") newValue = maskToPhoneNumber(value);
-    if (mask === "CEP") newValue = maskToCep(value);
-    if (mask === "CPF") newValue = maskToCpf(value);
-    if (mask === "NUMBER") newValue = maskToOnlyNumbers(value);
-    if (mask === "DATE") newValue = maskToDate(value);
-    setValue(name as keyof TFormValues, newValue);
-  };
-
-  const handleBlurMask = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    mask:
-      | "PHONE"
-      | "CEP"
-      | "CPF"
-      | "MONEY"
-      | "PERCENTAGE"
-      | "NUMBER"
-      | "DATE"
-      | "" = ""
-  ) => {
-    const { value, name } = e.target;
-    let newValue = value;
-    if (mask === "MONEY")
-      newValue = maskFixToMoney(value, "", "commam", "commam");
-    if (mask === "PERCENTAGE") newValue = maskFixToPercentage(value);
-    if (mask === "DATE") newValue = maskFixToDate(value);
-    setValue(name as keyof TFormValues, newValue);
+  // submit
+  const onSubmitAddUser: SubmitHandler<TFormValues> = (data) => {
+    // check password is equal
+    console.log("data submitted", data);
   };
 
   return (
     <>
       <div className="grid grid-cols-2 gap-5">
         <form onSubmit={handleSubmit(onSubmitAddUser)}>
-          <label className="block border border-black py-2 px-2 bg-gray-100">
+          <InputField register={register} errors={errors} field="name" />
+          <InputField register={register} errors={errors} field="email" />
+          <InputField
+            register={register}
+            errors={errors}
+            field="salary"
+            maskInput={"MONEY"}
+            setValue={setValue}
+          />
+          <InputField
+            register={register}
+            errors={errors}
+            field="raise"
+            maskInput={"PERCENTAGE"}
+            setValue={setValue}
+          />
+          <InputField
+            register={register}
+            errors={errors}
+            field="cep"
+            maskInput={"CEP"}
+            setValue={setValue}
+          />
+          <InputField
+            register={register}
+            errors={errors}
+            field="phone"
+            maskInput={"PHONE"}
+            setValue={setValue}
+          />
+          <InputField
+            register={register}
+            errors={errors}
+            field="cpf"
+            maskInput={"CPF"}
+            setValue={setValue}
+          />
+          <InputField
+            register={register}
+            errors={errors}
+            field="workdays"
+            maskInput={"NUMBER"}
+            setValue={setValue}
+          />
+          <InputField register={register} errors={errors} field="password" />
+          <InputField register={register} errors={errors} field="repassword" />
+          <InputField
+            register={register}
+            errors={errors}
+            field="age"
+            maskInput={"NUMBER"}
+            setValue={setValue}
+          />
+          <InputField
+            register={register}
+            errors={errors}
+            field="birthday"
+            maskInput={"DATE"}
+            setValue={setValue}
+          />
+          {/* <InputField register={register} errors={errors} field="genre"  /> */}
+          {/* <InputField register={register} errors={errors} field="agree" /> */}
+          {/* <InputField register={register} errors={errors} field="theme" /> */}
+          {/* <InputField register={register} errors={errors} field="description" /> */}
+          {/* <InputField register={register} errors={errors} field="title" /> */}
+
+          {/* <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Nome (name)</span>
             <input
               {...register("name")}
@@ -87,8 +102,8 @@ function App() {
               type="text"
             />
             {errors.name && <p className="bg-red-400">{errors.name.message}</p>}
-          </label>
-          <label className="block border border-black py-2 px-2 bg-gray-100">
+          </label> */}
+          {/* <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">E-mail (email):</span>
             <input
               {...register("email")}
@@ -297,10 +312,7 @@ function App() {
               className="border border-black"
               {...register("description")}
             />
-            {errors.description && (
-              <p className="bg-red-400">{errors.description.message}</p>
-            )}
-          </label>
+          </label> */}
           <button
             type="submit"
             className="bg-green-400 hover:bg-green-600 px-2 py-2"
@@ -309,7 +321,7 @@ function App() {
           </button>
         </form>
         <div>
-          <pre>{JSON.stringify(watchAllFields, null, 1)}</pre>
+          <pre>{JSON.stringify(watch(), null, 1)}</pre>
         </div>
       </div>
     </>
