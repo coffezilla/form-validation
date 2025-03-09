@@ -1,33 +1,44 @@
-// YYYY-MM-DD
 export const maskToDate = (
-  valueRaw?: string | Date | null,
-  hasTime = false,
-  outputDatabaseFormat = false,
+  valueRaw?: string | number | null,
   emptySymbol: string = ""
-): string => {
+) => {
   if (!valueRaw) return emptySymbol;
 
   let valueFormatted = valueRaw.toString();
-
-  const date = new Date(valueFormatted);
-  const day = String(date.getUTCDate()).padStart(2, "0");
-  const month = String(date.getUTCMonth() + 1).padStart(2, "0");
-  const shortYear = String(date.getUTCFullYear()).slice(-2).padStart(2, "0");
-  const fullYear = String(date.getUTCFullYear());
-  const hours = String(date.getUTCHours()).padStart(2, "0");
-  const minutes = String(date.getUTCMinutes()).padStart(2, "0");
-
-  if (day === "NaN") return emptySymbol;
-
-  if (outputDatabaseFormat) {
-    valueFormatted = hasTime
-      ? `${fullYear}-${month}-${day} ${hours}:${minutes}h`
-      : `${fullYear}-${month}-${day}`;
-  } else {
-    valueFormatted = hasTime
-      ? `${day}/${month}/${shortYear} ${hours}:${minutes}h`
-      : `${day}/${month}/${shortYear}`;
-  }
+  valueFormatted = valueFormatted.replace(/\D/g, "");
+  valueFormatted = valueFormatted.replace(/(\d{2})(\d)/, "$1/$2");
+  valueFormatted = valueFormatted.replace(/(\d{2})(\d)/, "$1/$2");
 
   return valueFormatted;
+};
+
+export const maskFixToDate = (
+  valueRaw?: string | number | null,
+  emptySymbol: string = ""
+) => {
+  if (!valueRaw) return emptySymbol;
+
+  const valueFormatted = valueRaw.toString();
+  const parts = valueFormatted.split("/");
+  const day = parts[0];
+  const month = parts[1];
+  const year = parts[2];
+
+  const formattedDDMMYYYY = `${day}/${month}/${year}`;
+  const formattedMMDDYYYY = `${month}/${day}/${year}`;
+
+  const dateObject = new Date(formattedMMDDYYYY);
+
+  const isValidDate =
+    dateObject instanceof Date &&
+    !isNaN(dateObject.getTime()) &&
+    dateObject.getFullYear() === parseInt(year, 10) &&
+    dateObject.getMonth() + 1 === parseInt(month, 10) &&
+    dateObject.getDate() === parseInt(day, 10);
+
+  if (!isValidDate) {
+    return emptySymbol;
+  }
+
+  return formattedDDMMYYYY;
 };

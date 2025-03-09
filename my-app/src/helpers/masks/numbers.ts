@@ -13,11 +13,12 @@ export const maskToOnlyNumbers = (
 };
 
 // 0.00
-export const maskToPercentage = (
+export const maskFixToPercentage = (
   valueRaw?: string | number | null,
   decimals: number = 2,
   isMathematical = false,
-  prefix = ""
+  prefix = "",
+  emptySymbol: string = ""
 ) => {
   if (!valueRaw) return emptySymbol;
 
@@ -45,5 +46,5 @@ export const maskToSelic = (selicNumber: number) => {
   const taxa_anual = (1 + taxa_diaria) ** 254 - 1;
   const taxa_anual_percentual = taxa_anual * 100;
 
-  return maskToPercentage(taxa_anual_percentual, 3, false, "%");
+  return maskFixToPercentage(taxa_anual_percentual, 3, false, "%");
 };

@@ -26,9 +26,12 @@ export const formSchema = z.object({
   password: z.string().min(1, "Password should be longer than 1 character"),
   repassword: z.string().min(1, "Repassword should be longer than 1 character"),
   // date
-  birthday: z.string().min(1, "Birthday should be longer than 1 character"),
+  birthday: z
+    .string()
+    .min(10, "Birthday should be longer than 1 character")
+    .max(10, "should be valid date"),
   // number
-  age: z.number().int().min(1, "Age should be longer than 1 character"),
+  age: z.string().min(1, "Age should be longer than 1 character"),
   // checkbox
   agree: z
     .boolean()
@@ -45,18 +48,6 @@ export const formSchema = z.object({
 
 // type
 export type TFormValues = z.infer<typeof formSchema>;
-
-// // pre change
-// export const handleMask = (
-//     e: React.ChangeEvent<HTMLInputElement>,
-//     mask: "CEP" | "MONEY" | "" = ""
-//   ) => {
-//     const { value, name } = e.target;
-//     let newValue = value;
-//     if (mask === "CEP") newValue = value + "x";
-//     if (mask === "MONEY") newValue = value + "y";
-//     setValue(name as keyof TFormValues, newValue);
-//   };
 
 // submit
 export const onSubmitAddUser: SubmitHandler<TFormValues> = (data) => {

@@ -1,5 +1,5 @@
 // R$ 0,00
-export const maskToMoney = (
+export const maskFixToMoney = (
   valueRaw?: string | number | null,
   prefix: string = "",
   fromSeparatedCents: "commam" | "dot" = "dot",

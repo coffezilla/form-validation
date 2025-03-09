@@ -9,9 +9,12 @@ import {
 import { maskToPhoneNumber } from "./helpers/masks/phone";
 import { maskToCep } from "./helpers/masks/address";
 import { maskToCpf } from "./helpers/masks/personal";
-import { maskToMoney } from "./helpers/masks/currency";
-import { maskToOnlyNumbers, maskToPercentage } from "./helpers/masks/numbers";
-import { maskToDate } from "./helpers/masks/time";
+import { maskFixToMoney } from "./helpers/masks/currency";
+import {
+  maskFixToPercentage,
+  maskToOnlyNumbers,
+} from "./helpers/masks/numbers";
+import { maskFixToDate, maskToDate } from "./helpers/masks/time";
 
 function App() {
   const {
@@ -43,8 +46,6 @@ function App() {
     if (mask === "PHONE") newValue = maskToPhoneNumber(value);
     if (mask === "CEP") newValue = maskToCep(value);
     if (mask === "CPF") newValue = maskToCpf(value);
-    if (mask === "MONEY") newValue = maskToMoney(value);
-    if (mask === "PERCENTAGE") newValue = maskToPercentage(value);
     if (mask === "NUMBER") newValue = maskToOnlyNumbers(value);
     if (mask === "DATE") newValue = maskToDate(value);
     setValue(name as keyof TFormValues, newValue);
@@ -64,13 +65,10 @@ function App() {
   ) => {
     const { value, name } = e.target;
     let newValue = value;
-    if (mask === "PHONE") newValue = maskToPhoneNumber(value);
-    if (mask === "CEP") newValue = maskToCep(value);
-    if (mask === "CPF") newValue = maskToCpf(value);
-    if (mask === "MONEY") newValue = maskToMoney(value, "", "commam", "commam");
-    if (mask === "PERCENTAGE") newValue = maskToPercentage(value);
-    if (mask === "NUMBER") newValue = maskToOnlyNumbers(value);
-    if (mask === "DATE") newValue = maskToDate(value);
+    if (mask === "MONEY")
+      newValue = maskFixToMoney(value, "", "commam", "commam");
+    if (mask === "PERCENTAGE") newValue = maskFixToPercentage(value);
+    if (mask === "DATE") newValue = maskFixToDate(value);
     setValue(name as keyof TFormValues, newValue);
   };
 
@@ -87,7 +85,7 @@ function App() {
               title="name"
               type="text"
             />
-            {errors.name && <p>{errors.name.message}</p>}
+            {errors.name && <p className="bg-red-400">{errors.name.message}</p>}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">E-mail (email):</span>
@@ -98,36 +96,37 @@ function App() {
               title="email"
               type="email"
             />
-            {errors.email && <p>{errors.email.message}</p>}
+            {errors.email && (
+              <p className="bg-red-400">{errors.email.message}</p>
+            )}
           </label>
-          <label className="block border border-black py-2 px-2 bg-green-100">
-            <span className="block">
-              [ERROR] Salário (salary) (máscara dinheiro)
-            </span>
+          <label className="block border border-black py-2 px-2 bg-gray-100">
+            <span className="block">Salário (salary) (máscara dinheiro)</span>
             <input
               {...register("salary")}
-              // onChange={(e) => handleMask(e, "MONEY")}
               onBlur={(e) => handleBlurMask(e, "MONEY")}
               className="border border-black"
               id="salary"
               title="salary"
               type="salary"
             />
-            {errors.salary && <p>{errors.salary.message}</p>}
+            {errors.salary && (
+              <p className="bg-red-400">{errors.salary.message}</p>
+            )}
           </label>
-          <label className="block border border-black py-2 px-2 bg-green-100">
-            <span className="block">
-              [ERROR] Aumento (raise) (máscara porcentagem)
-            </span>
+          <label className="block border border-black py-2 px-2 bg-gray-100">
+            <span className="block">Aumento (raise) (máscara porcentagem)</span>
             <input
               {...register("raise")}
-              onChange={(e) => handleMask(e, "PERCENTAGE")}
+              onBlur={(e) => handleBlurMask(e, "PERCENTAGE")}
               className="border border-black"
               id="raise"
               title="raise"
               type="raise"
             />
-            {errors.raise && <p>{errors.raise.message}</p>}
+            {errors.raise && (
+              <p className="bg-red-400">{errors.raise.message}</p>
+            )}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">CEP (cep) (máscara cep)</span>
@@ -139,7 +138,7 @@ function App() {
               title="cep"
               type="cep"
             />
-            {errors.cep && <p>{errors.cep.message}</p>}{" "}
+            {errors.cep && <p className="bg-red-400">{errors.cep.message}</p>}{" "}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Phone (phone) (máscara phone)</span>
@@ -151,7 +150,9 @@ function App() {
               title="phone"
               type="phone"
             />
-            {errors.phone && <p>{errors.phone.message}</p>}{" "}
+            {errors.phone && (
+              <p className="bg-red-400">{errors.phone.message}</p>
+            )}{" "}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">CPF (cpf) (máscara cpf)</span>
@@ -163,7 +164,7 @@ function App() {
               title="cpf"
               type="cpf"
             />
-            {errors.cpf && <p>{errors.cpf.message}</p>}{" "}
+            {errors.cpf && <p className="bg-red-400">{errors.cpf.message}</p>}{" "}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Dias trabalhados (workdays)</span>
@@ -184,7 +185,9 @@ function App() {
               title="password"
               type="password"
             />
-            {errors.password && <p>{errors.password.message}</p>}{" "}
+            {errors.password && (
+              <p className="bg-red-400">{errors.password.message}</p>
+            )}{" "}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Confirmar senha (repassword)</span>
@@ -195,7 +198,9 @@ function App() {
               title="repassword"
               type="repassword"
             />
-            {errors.repassword && <p>{errors.repassword.message}</p>}
+            {errors.repassword && (
+              <p className="bg-red-400">{errors.repassword.message}</p>
+            )}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Idade (age) Só número:</span>
@@ -207,21 +212,24 @@ function App() {
               title="age"
               type="age"
             />
-            {errors.age && <p>{errors.age.message}</p>}{" "}
+            {errors.age && <p className="bg-red-400">{errors.age.message}</p>}{" "}
           </label>
-          <label className="block border border-black py-2 px-2 bg-green-100">
+          <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">
-              [ERROR] Data de nascimento (birthday) (Máscara data):
+              Data de nascimento (birthday) (Máscara data):
             </span>
             <input
               {...register("birthday")}
               onChange={(e) => handleMask(e, "DATE")}
+              onBlur={(e) => handleBlurMask(e, "DATE")}
               className="border border-black"
               id="birthday"
               title="birthday"
               type="birthday"
             />
-            {errors.birthday && <p>{errors.birthday.message}</p>}{" "}
+            {errors.birthday && (
+              <p className="bg-red-400">{errors.birthday.message}</p>
+            )}{" "}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <select
@@ -234,12 +242,16 @@ function App() {
               <option value="male">Male</option>
               <option value="female">Female</option>
             </select>
-            {errors.genre && <p>{errors.genre.message}</p>}
+            {errors.genre && (
+              <p className="bg-red-400">{errors.genre.message}</p>
+            )}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Concordo (agree)</span>
             <input {...register("agree")} title="agree" type="checkbox" />
-            {errors.agree && <p>{errors.agree.message}</p>}
+            {errors.agree && (
+              <p className="bg-red-400">{errors.agree.message}</p>
+            )}
           </label>
 
           <label className="block border border-black py-2 px-2 bg-gray-100">
@@ -262,7 +274,7 @@ function App() {
 
             <span className="block">Preferência Dark (theme)</span>
           </label>
-          {errors.theme && <p>{errors.theme.message}</p>}
+          {errors.theme && <p className="bg-red-400">{errors.theme.message}</p>}
 
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Título (title) (Obrigatório)</span>
@@ -272,7 +284,9 @@ function App() {
               className="border border-black"
               {...register("title")}
             />
-            {errors.title && <p>{errors.title.message}</p>}
+            {errors.title && (
+              <p className="bg-red-400">{errors.title.message}</p>
+            )}
           </label>
           <label className="block border border-black py-2 px-2 bg-gray-100">
             <span className="block">Descrição (description) (Opcional)</span>
@@ -282,7 +296,9 @@ function App() {
               className="border border-black"
               {...register("description")}
             />
-            {errors.description && <p>{errors.description.message}</p>}
+            {errors.description && (
+              <p className="bg-red-400">{errors.description.message}</p>
+            )}
           </label>
           <button
             type="submit"
